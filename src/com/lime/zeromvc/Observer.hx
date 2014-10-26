@@ -12,7 +12,7 @@ class Observer<TKey> {
 
     private var target:Dynamic ;
     private var pool:ObjectMap<TKey, ObjectMap<Dynamic, Dynamic>> ;
-    private var instancePool:ObjectMap<TKey, IExecute<Dynamic, Dynamic, Dynamic>> ;
+    private var instancePool:ObjectMap<TKey, IExecute<Dynamic, TKey, Dynamic>> ;
 
 /**
      * 观察者
@@ -138,7 +138,7 @@ class Observer<TKey> {
         var out:Int = 0;
         if (hasListener(type)) {
             for (classType in pool.get(type)) {
-                var neure:IExecute<Dynamic, Dynamic, Dynamic> ;
+                var neure:IExecute<Dynamic, TKey, Dynamic> ;
                 if (instancePool.get(type) != null) {
                     neure = instancePool.get(type);
                     neure.execute(data);
