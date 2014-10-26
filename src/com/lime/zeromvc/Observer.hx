@@ -12,7 +12,6 @@ class Observer<TKey> {
 
     private var target:Dynamic ;
     private var pool:ObjectMap<TKey, ObjectMap<Dynamic, Dynamic>> ;
-//    private var pool:Map<Dynamic,Map<Dynamic,Dynamic>> = new Map <Dynamic,Map<Dynamic,Dynamic>> () ;
     private var instancePool:ObjectMap<TKey, IExecute<Dynamic, Dynamic, Dynamic>> ;
 
 /**
@@ -116,10 +115,13 @@ class Observer<TKey> {
      */
 
     public function dispose(type:TKey) {
+
         if (instancePool.get(type) != null) {
+        trace("1");
             instancePool.remove(type);
             return true;
         } else {
+            trace("2");
             return false;
         }
     }
@@ -132,7 +134,7 @@ class Observer<TKey> {
      * @return 执行次数
      */
 
-    public function notify(type:TKey, data:Dynamic):Int {
+    public function notify(type:TKey, data:Dynamic = null):Int {
         var out:Int = 0;
         if (hasListener(type)) {
             for (classType in pool.get(type)) {
@@ -142,9 +144,9 @@ class Observer<TKey> {
                     neure.execute(data);
                 } else {
                     neure = Type.createInstance(classType, new Array<Dynamic>());
+                    instancePool.set(type, neure);
                     neure.init(target, type);
                     neure.execute(data);
-                    instancePool.set(type, neure);
                     out++;
                 }
             }
